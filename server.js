@@ -11,6 +11,8 @@ const env = require("dotenv").config();
 const app = express();
 const static = require("./routes/static");
 const baseController = require("./controllers/baseController");
+
+const inventoryRouter = require("./routes/inventoryRoute");
 /* ***********************
  * View engines and Templates
  *************************/
@@ -40,3 +42,7 @@ app.listen(port, () => {
 
 //index route
 app.get("/", baseController.buildHome);
+
+//Inventory routes
+app.use("/inv", inventoryRouter);
+// short, any route that starts with /inv will then be redirected to the inventoryRoute.js
