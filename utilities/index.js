@@ -31,7 +31,7 @@ Util.getNav = async function (req, res, next) {
 Util.buildClassificationGrid = async function (data) {
   let grid;
   if (data.length > 0) {
-    grid = '<ul id="inv-display">';
+    grid = '<ul id="inv-display" class="cars-catalog">';
     data.forEach((vehicle) => {
       grid += "<li>";
       grid +=
@@ -76,6 +76,37 @@ Util.buildClassificationGrid = async function (data) {
     grid += '<p class="notice">Sorry, no matching vehicles could be found.</p>';
   }
   return grid;
+};
+
+Util.buildCarDetailGrid = async function (data) {
+  let pageTitle = `<h2>${data[0].inv_make} ${data[0].inv_model} </h2>`;
+  let innerHTML = `
+  <article class="detailGrid">
+
+    <div class="detailGrid__img">
+      <img src="${data[0].inv_image}" alt="Car model front image" />
+    </div>
+    
+    <div class="detailGrid__about">
+      <p>${data[0].inv_description}</p>
+      <span>
+          <strong>Price:</strong>
+          $${new Intl.NumberFormat("en-US").format(data[0].inv_price)}
+      </span>
+      <time datetime="${data[0].inv_year}"><b>Year:</b> 
+        ${data[0].inv_year}
+      </time>
+      <span><b>Color:</b> ${data[0].inv_color}</span>
+      <span><b>Brand:</b> ${data[0].inv_make}</span>
+      <span><b>Model:</b> ${data[0].inv_model}</span>
+      <span><b>Miles travelled:</b> ${new Intl.NumberFormat("en-Us").format(
+        data[0].inv_miles
+      )}</span>
+    </div>
+  </article>
+  `;
+  const view = pageTitle + innerHTML;
+  return view;
 };
 
 /* ****************************************

@@ -60,6 +60,22 @@ nav ul {
   text-transform: capitalize;
   color: white;
 }
+.navigationOption a {
+  color: white;
+}
+
+.cars-catalog {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+  list-style: none;
+  text-align: center;
+}
+
+.cars-catalog li img {
+  height: 110px;
+  max-width: 100%;
+}
 
 .hero {
   background-image: url(/images/vehicles/delorean-tn.jpg);
@@ -124,6 +140,25 @@ nav ul {
 
 .upgrades img {
   height: 60px;
+}
+
+.detailGrid {
+  display: grid;
+  row-gap: 20px;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+}
+
+.detailGrid__about {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  justify-content: center;
+}
+
+.detailGrid__img img {
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  padding: 5px;
+  max-width: 100%;
 }
 
 @media screen and (min-width: 768px) {

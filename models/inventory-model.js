@@ -28,7 +28,25 @@ async function getInventoryByClassificationId(classification_id) {
   }
 }
 
+/**
+ * Retrieves a car from the inventory by its ID.
+ * @param {number} inventory_id - The ID of the car in the inventory.
+ * @returns {Promise<Array<Object>>} A promise that resolves to an array of car objects.
+ */
+async function getCarById(inventory_id) {
+  try {
+    const data = await pool.query(
+      `SELECT * FROM inventory as i WHERE i.inv_id = $1`,
+      [inventory_id]
+    );
+    return data.rows;
+  } catch (error) {
+    console.error("getCarById error " + error);
+  }
+}
+
 module.exports = {
   getClassifications,
   getInventoryByClassificationId,
+  getCarById,
 };
