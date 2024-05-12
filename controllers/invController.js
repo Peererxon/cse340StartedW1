@@ -19,6 +19,9 @@ invCont.buildByClassificationId = async function (req, res, next) {
   });
 };
 
+/* ***************************
+ *  Build inventory by car detail view
+ * ************************** */
 invCont.buildByCarId = async function (req, res, next) {
   const cardId = req.params.carId;
   const data = await invModel.getCarById(cardId);

@@ -45,14 +45,21 @@ app.listen(port, () => {
 app.get("/", utilities.handleErrors(baseController.buildHome));
 
 //Inventory routes
-app.use("/inv", inventoryRouter);
+app.use("/inv", utilities.handleErrors(inventoryRouter));
 // short, any route that starts with /inv will then be redirected to the inventoryRoute.js
 
 // File Not Found Route - must be last route in list
 app.use(async (req, res, next) => {
+  if (!req.params.errorStatus) {
+    console.log("In the router error handler without errorStatus");
+    next({ status: 404, message: "Sorry, we appear to have lost that page." });
+    return;
+  }
   console.log("In the router error handler");
-
-  next({ status: 404, message: "Sorry, we appear to have lost that page." });
+  next({
+    status: req.params.errorStatus,
+    message: "Unknown error occurred. Please try again.",
+  });
   //Funcionamiento de next: si se llama con un argumento, se asume que es un error y se pasa al siguiente middleware que maneje errores.
 });
 
@@ -63,7 +70,7 @@ app.use(async (req, res, next) => {
 app.use(async (err, req, res, next) => {
   let nav = await utilities.getNav();
   console.error(`Error at: "${req.originalUrl}": ${err.message}`);
-  if (err.status == 404) {
+  if (err.status == 404 || err.status == 500) {
     message = err.message;
   } else {
     message = "Oh no! There was a crash. Maybe try a different route?";
