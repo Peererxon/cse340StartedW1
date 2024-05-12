@@ -8,8 +8,6 @@
 :root {
   --primary: color(srgb 0.1389 0.137 0.1987);
   --secundary: #4d96d7;
-  --heroImage-xs: /images/vehicles/delorean-tn.jpg;
-  --heroImagen-lg: /images/vehicles/delorean.jpg;
 }
 
 a {
