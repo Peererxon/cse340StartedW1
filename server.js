@@ -5,6 +5,8 @@
 /* ***********************
  * Require Statements
  *************************/
+const session = require("express-session");
+const pool = require("./database/");
 const express = require("express");
 const expressLayouts = require("express-ejs-layouts");
 const env = require("dotenv").config();
@@ -13,7 +15,32 @@ const static = require("./routes/static");
 const baseController = require("./controllers/baseController");
 
 const inventoryRouter = require("./routes/inventoryRoute");
+const accountRouter = require("./routes/accountRoute");
 const utilities = require("./utilities");
+
+/* ***********************
+ * Middleware
+ * ************************/
+app.use(
+  session({
+    store: new (require("connect-pg-simple")(session))({
+      createTableIfMissing: true,
+      pool,
+    }),
+    secret: process.env.SESSION_SECRET,
+    resave: true,
+    saveUninitialized: true,
+    name: "sessionId",
+  })
+);
+
+// Express Messages Middleware
+app.use(require("connect-flash")()); //for flash messages
+app.use(function (req, res, next) {
+  res.locals.messages = require("express-messages")(req, res);
+  next();
+});
+
 /* ***********************
  * View engines and Templates
  *************************/
@@ -47,6 +74,8 @@ app.get("/", utilities.handleErrors(baseController.buildHome));
 //Inventory routes
 app.use("/inv", utilities.handleErrors(inventoryRouter));
 // short, any route that starts with /inv will then be redirected to the inventoryRoute.js
+
+app.use("/account", utilities.handleErrors(accountRouter));
 
 // File Not Found Route - must be last route in list
 app.use(async (req, res, next) => {
