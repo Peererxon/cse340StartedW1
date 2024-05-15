@@ -109,6 +109,21 @@ Util.buildCarDetailGrid = async function (data) {
   return view;
 };
 
+Util.buildPasswordRules = function () {
+  let rules = ` 
+   <div>
+    <span id="length">There must be at least 12 characters</span>,
+    <span id="digit">one must be a number</span> ,
+    <span id="lowercase">one must be a lowercase letter</span> ,
+    <span id="uppercase">one must be a capital letter</span> ,
+    <span id="nonAlphaNumeric">
+      and one must be a non-alphanumeric character
+    </span>
+  </div>`;
+  return rules;
+  //autocomplete
+};
+
 /* ****************************************
  * Middleware For Handling Errors
  * Wrap other function in this for
