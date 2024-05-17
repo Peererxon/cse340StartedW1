@@ -29,7 +29,7 @@
 
 <h1><%- title %></h1>
 
-<form action="" method="post" class="form">
+<form action="/account/register" method="post" class="form">
   <%- messages() %>
   <fieldset>
     <legend>Register form</legend>
@@ -60,6 +60,14 @@
       />
       <span></span>
       <%- passwordRules %>
+      <hr />
+      <% if (errors) { %>
+      <ul class="notice">
+        <% errors.array().forEach(error => { %>
+        <li><%= error.msg %></li>
+        <% }) %>
+      </ul>
+      <% } %>
     </div>
     <div class="form__field form__field--btn">
       <button type="submit">Register</button>

@@ -1,0 +1,16 @@
+{
+  "sqltools.connections": [
+    {
+      "pgOptions": {
+        "ssl": {
+          "rejectUnauthorized": true
+        }
+      },
+      "previewLimit": 50,
+      "server": "localhost",
+      "driver": "PostgreSQL",
+      "name": "render.comdb",
+      "connectString": "postgres://database_backend1byu_database2_user:s0VzbYn5l1NNzSt4m30yH6IdWzfRTK6u@dpg-coq0r8ljm4es73ad93j0-a.oregon-postgres.render.com/database_backend1byu_database2"
+    }
+  ]
+}

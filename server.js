@@ -6,9 +6,11 @@
  * Require Statements
  *************************/
 const session = require("express-session");
-const pool = require("./database/");
+const bodyParser = require("body-parser");
 const express = require("express");
 const expressLayouts = require("express-ejs-layouts");
+const pool = require("./database/");
+
 const env = require("dotenv").config();
 const app = express();
 const static = require("./routes/static");
@@ -33,6 +35,9 @@ app.use(
     name: "sessionId",
   })
 );
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
 
 // Express Messages Middleware
 app.use(require("connect-flash")()); //for flash messages
@@ -109,5 +114,6 @@ app.use(async (err, req, res, next) => {
     title: err.status || "Server Error",
     message: err.message,
     nav,
+    errors: null,
   });
 });
