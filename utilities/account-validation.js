@@ -53,8 +53,6 @@ validate.registrationRules = () => {
 
 validate.checkRegData = async (req, res, next) => {
   const passwordRules = utilities.buildPasswordRules();
-  console.log(req.body);
-  console.log("antes de validar");
   const { account_firstname, account_lastname, account_email } = req.body;
   let errors = validationResult(req);
   if (!errors.isEmpty()) {

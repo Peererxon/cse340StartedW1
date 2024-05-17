@@ -35,17 +35,35 @@
     <legend>Register form</legend>
     <div class="form__field">
       <label for="firstName">First Name:</label>
-      <input type="text" id="firstName" name="account_firstname" required />
+      <input
+        type="text"
+        id="firstName"
+        name="account_firstname"
+        required
+        value="<%= locals.account_firstname %>"
+      />
       <span></span>
     </div>
     <div class="form__field">
       <label for="lastName">Last Name:</label>
-      <input type="text" id="lastName" name="account_lastname" required />
+      <input
+        type="text"
+        id="lastName"
+        name="account_lastname"
+        required
+        value="<%= locals.account_lastname %>"
+      />
       <span></span>
     </div>
     <div class="form__field">
       <label for="email">Email Address:</label>
-      <input type="email" id="email" name="account_email" required />
+      <input
+        type="email"
+        id="email"
+        name="account_email"
+        required
+        value="<%= locals.account_email %>"
+      />
       <span></span>
     </div>
     <div class="form__field">
