@@ -1,0 +1,16 @@
+<h1><%- title %></h1>
+
+<form action="/inv/classification" method="post" class="form">
+  <fieldset>
+    <legend>Add new classification</legend>
+    <div class="form__field">
+      <label for="name">Name:</label>
+      <input type="text" id="name" name="classification_name" required />
+      <span></span>
+    </div>
+    <div class="form__field form__field--btn">
+      <button type="submit">Add</button>
+      <span></span>
+    </div>
+  </fieldset>
+</form>

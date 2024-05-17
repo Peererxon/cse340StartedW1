@@ -37,4 +37,22 @@ invCont.buildByCarId = async function (req, res, next) {
   });
 };
 
+invCont.buildAdminView = async function (req, res, next) {
+  let nav = await utilities.getNav();
+  res.render("./inventory/admin-functions", {
+    title: "Admin Inventory",
+    nav,
+    errors: null,
+  });
+};
+
+invCont.buildAddClassification = async function (req, res, next) {
+  let nav = await utilities.getNav();
+  res.render("./inventory/add-classification", {
+    title: "Add Classification",
+    nav,
+    errors: null,
+  });
+};
+
 module.exports = invCont;

@@ -7,4 +7,8 @@ const baseController = require("../controllers/baseController");
 router.get("/type/:classificationId", invController.buildByClassificationId);
 router.get("/detail/:carId", invController.buildByCarId);
 router.get("errors/error/:errorStatus", baseController.buildError);
+
+// Route to build admin view
+router.get("", invController.buildAdminView);
+router.get("/classification", invController.buildAddClassification);
 module.exports = router;
