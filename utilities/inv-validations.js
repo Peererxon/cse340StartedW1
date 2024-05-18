@@ -1,0 +1,139 @@
+const utilities = require(".");
+const { body, validationResult } = require("express-validator");
+const validate = {};
+
+validate.classificationRules = () => {
+  return [
+    // name validation
+    body("classification_name")
+      .trim()
+      .escape()
+      .notEmpty()
+      .matches("^[a-zA-Z]*$")
+      .withMessage("Please provide a name, only letters allowed"),
+  ];
+};
+
+validate.checkClassificationData = async (req, res, next) => {
+  const { classification_name } = req.body;
+  let errors = validationResult(req);
+  console.log(errors);
+  if (!errors.isEmpty()) {
+    let nav = await utilities.getNav();
+    res.render("./inventory/add-classification", {
+      title: "Add Classification",
+      nav,
+      errors,
+      classification_name,
+    });
+    return;
+  }
+  next();
+};
+
+validate.inventoryRules = () => {
+  return [
+    // make validation
+    body("inv_make")
+      .trim()
+      .escape()
+      .notEmpty()
+      .withMessage("Please provide a company"),
+    // model validation
+    body("inv_model")
+      .trim()
+      .escape()
+      .notEmpty()
+      .matches("^[a-zA-Z]*$")
+      .withMessage("Please provide a model, only letters allowed"),
+    // year validation
+    body("inv_year")
+      .trim()
+      .escape()
+      .notEmpty()
+      .isInt()
+      .isLength({ min: 4, max: 4 })
+      .withMessage("Please provide a valid year"),
+    //miles validation
+    body("inv_miles")
+      .trim()
+      .escape()
+      .notEmpty()
+      .isInt()
+      .withMessage("Please provide a valid mileage"),
+    // price validation
+    body("inv_price")
+      .trim()
+      .escape()
+      .notEmpty()
+      .isInt()
+      .withMessage("Please provide a valid price"),
+    // color validation
+    body("inv_color")
+      .trim()
+      .escape()
+      .notEmpty()
+      .matches("^[a-zA-Z]*$")
+      .withMessage("Please provide a color, only letters allowed"),
+    // classification validation
+    body("classification_id")
+      .trim()
+      .escape()
+      .notEmpty()
+      .isInt()
+      .withMessage("Please provide a valid classification"),
+    // thumbnail validation
+    body("inv_thumbnail")
+      .trim()
+      .escape()
+      .notEmpty()
+      .withMessage("Please provide a valid image URL"),
+    //image validation
+    body("inv_image")
+      .trim()
+      .escape()
+      .notEmpty()
+      .withMessage("Please provide a valid image URL"),
+  ];
+};
+
+validate.checkInventoryData = async (req, res, next) => {
+  const {
+    inv_make,
+    inv_model,
+    inv_year,
+    inv_miles,
+    inv_price,
+    inv_color,
+    inv_description,
+    classification_id,
+    inv_thumbnail,
+    inv_image,
+  } = req.body;
+  let errors = validationResult(req);
+  console.log(inv_image);
+  if (!errors.isEmpty()) {
+    const nav = await utilities.getNav();
+    const classificationList = await utilities.buildClassificationList();
+    res.render("./inventory/add-inventory", {
+      title: "Add Inventory",
+      nav,
+      errors,
+      inv_make,
+      inv_model,
+      inv_year,
+      inv_price,
+      inv_color,
+      inv_miles,
+      inv_description,
+      classification_id,
+      inv_thumbnail,
+      inv_image,
+      classificationList,
+    });
+    return;
+  }
+  next();
+};
+
+module.exports = validate;

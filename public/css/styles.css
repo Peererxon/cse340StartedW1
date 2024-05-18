@@ -200,6 +200,7 @@ nav ul {
 
 .form__field input:required:focus:invalid + span::after {
   content: "Invalid";
+  background-color: red;
 }
 
 .valid {

@@ -1,4 +1,4 @@
-const pool = require("../database/");
+const pool = require("../database");
 
 /**
  * Retrieves all classifications from the database.
@@ -45,8 +45,35 @@ async function getCarById(inventory_id) {
   }
 }
 
+async function addClassification(classification_name) {
+  const query =
+    "INSERT INTO classification (classification_name) VALUES ($1) RETURNING *";
+  return await pool.query(query, [classification_name]);
+}
+
+async function addVehicle(vehicle) {
+  console.log("🚀 ~ addVehicle ~ vehicle:", vehicle);
+
+  const query =
+    "INSERT INTO inventory (classification_id, inv_make, inv_model, inv_year, inv_miles, inv_price, inv_color, inv_description, inv_image, inv_thumbnail) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) RETURNING *";
+  return await pool.query(query, [
+    vehicle.classification_id,
+    vehicle.inv_make,
+    vehicle.inv_model,
+    vehicle.inv_year,
+    vehicle.inv_miles,
+    vehicle.inv_price,
+    vehicle.inv_color,
+    vehicle.inv_description,
+    vehicle.inv_image,
+    vehicle.inv_thumbnail,
+  ]);
+}
+
 module.exports = {
   getClassifications,
   getInventoryByClassificationId,
   getCarById,
+  addClassification,
+  addVehicle,
 };

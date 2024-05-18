@@ -55,4 +55,94 @@ invCont.buildAddClassification = async function (req, res, next) {
   });
 };
 
+invCont.addClassification = async function (req, res) {
+  let nav = await utilities.getNav();
+
+  const { classification_name } = req.body;
+  try {
+    const classResult = invModel.addClassification(classification_name);
+    if (classResult) {
+      req.flash(
+        "notice",
+        `Classification ${classification_name} added successfully.`
+      );
+      res.status(201).render("./inventory/admin-functions", {
+        title: "Admin Inventory",
+        nav,
+        errors: null,
+      });
+    }
+  } catch (error) {
+    req.flash("notice", `Error adding classification ${classification_name}.`);
+    res.status(500).render("./inventory/admin-functions", {
+      title: "Admin Inventory",
+      nav,
+      errors: null,
+    });
+  }
+};
+
+invCont.buildAddInventory = async function (req, res) {
+  const nav = await utilities.getNav();
+  const classificationList = await utilities.buildClassificationList();
+  res.render("./inventory/add-inventory", {
+    title: "Add Inventory",
+    nav,
+    errors: null,
+    classificationList,
+  });
+};
+
+invCont.addVehicle = async function (req, res) {
+  const nav = await utilities.getNav();
+  const {
+    inv_make,
+    inv_model,
+    inv_year,
+    inv_miles,
+    inv_price,
+    inv_color,
+    inv_description,
+    classification_id,
+    inv_thumbnail,
+    inv_image,
+  } = req.body;
+  const vehicleData = {
+    inv_make,
+    inv_model,
+    inv_year,
+    inv_miles,
+    inv_price,
+    inv_color,
+    classification_id,
+    inv_thumbnail,
+    inv_image,
+    inv_description,
+  };
+  vehicleData.inv_image = "/images/vehicles/no-image.png";
+  vehicleData.inv_thumbnail = "/images/vehicles/no-image-tn.png";
+  try {
+    const addResult = await invModel.addVehicle(vehicleData);
+    if (addResult) {
+      req.flash(
+        "notice",
+        `Vehicle ${inv_make} ${inv_model} added successfully.`
+      );
+      res.status(201).render("./inventory/admin-functions", {
+        title: "Admin Inventory",
+        nav,
+        errors: null,
+      });
+    }
+  } catch (error) {
+    console.error(error);
+    req.flash("notice", `Error adding vehicle ${inv_make} ${inv_model}.`);
+    res.status(500).render("./inventory/admin-functions", {
+      title: "Admin Inventory",
+      nav,
+      errors: null,
+    });
+  }
+};
+
 module.exports = invCont;

@@ -4,13 +4,29 @@
   <fieldset>
     <legend>Add new classification</legend>
     <div class="form__field">
-      <label for="name">Name:</label>
-      <input type="text" id="name" name="classification_name" required />
+      <label for="name">Classification name:</label>
+      <input
+        type="text"
+        id="name"
+        name="classification_name"
+        required
+        pattern="^[a-zA-Z]*$"
+        value="<%= locals.classification_name %>"
+      />
       <span></span>
     </div>
+    <span><b>Important:</b>Only letters are allowed, no white spaces</span>
     <div class="form__field form__field--btn">
       <button type="submit">Add</button>
       <span></span>
     </div>
   </fieldset>
 </form>
+
+<% if (errors) { %>
+<ul class="notice">
+  <% errors.array().forEach(error => { %>
+  <li><%= error.msg %></li>
+  <% }) %>
+</ul>
+<% } %>
