@@ -10,6 +10,10 @@
   --secundary: #4d96d7;
 }
 
+.notice {
+  color: red;
+}
+
 a {
   text-decoration: none;
   cursor: pointer;

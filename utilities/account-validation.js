@@ -71,4 +71,36 @@ validate.checkRegData = async (req, res, next) => {
   next();
 };
 
+//login rules
+
+validate.loginRules = () => {
+  return [
+    body("account_email")
+      .trim()
+      .escape()
+      .notEmpty()
+      .isEmail()
+      .withMessage("Please provide email address"),
+    body("account_password")
+      .trim()
+      .notEmpty()
+      .withMessage("Please provide password"),
+  ];
+};
+
+validate.checkLogData = async (req, res, next) => {
+  const { account_email } = req.body;
+  let errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    let nav = await utilities.getNav();
+    res.render("account/login", {
+      title: "Login",
+      nav,
+      errors,
+      account_email,
+    });
+    return;
+  }
+  next();
+};
 module.exports = validate;

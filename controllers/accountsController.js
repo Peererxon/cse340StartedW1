@@ -1,6 +1,9 @@
 const utilities = require("../utilities/");
 const bcrypt = require("bcryptjs");
 const accountModel = require("../models/account-model");
+const jwt = require("jsonwebtoken");
+require("dotenv").config();
+
 const accountController = {};
 
 /* ****************************************
@@ -85,4 +88,57 @@ accountController.registerAccount = async function (req, res) {
     });
   }
 };
+
+/* ****************************************
+ *  Process login request
+ * ************************************ */
+accountController.accountLogin = async function (req, res) {
+  let nav = await utilities.getNav();
+  console.log("accountLogin controller called");
+  const { account_email, account_password } = req.body;
+  const accountData = await accountModel.getAccountByEmail(account_email);
+  if (!accountData) {
+    console.log("No account data in the db");
+    req.flash("notice", "Please check your credentials and try again.");
+    res.status(400).render("account/login", {
+      title: "Login",
+      nav,
+      errors: null,
+      account_email,
+    });
+    return;
+  }
+  try {
+    if (await bcrypt.compare(account_password, accountData.account_password)) {
+      delete accountData.account_password;
+      const accessToken = jwt.sign(
+        accountData,
+        process.env.ACCESS_TOKEN_SECRET,
+        { expiresIn: 3600 }
+      );
+      if (process.env.NODE_ENV === "development") {
+        res.cookie("jwt", accessToken, { httpOnly: true, maxAge: 3600 * 1000 }); //http only
+      } else {
+        res.cookie("jwt", accessToken, {
+          httpOnly: true,
+          secure: true, // only send cookie over https
+          maxAge: 3600 * 1000,
+        });
+      }
+      return res.redirect("/account/");
+    }
+  } catch (error) {
+    return new Error("Access Forbidden");
+  }
+};
+
+accountController.buildLoggedApp = async function (req, res) {
+  let nav = await utilities.getNav();
+  res.render("account/logged", {
+    title: "Logged",
+    nav,
+    errors: null,
+  });
+};
+
 module.exports = accountController;

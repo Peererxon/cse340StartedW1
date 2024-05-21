@@ -1,0 +1,139 @@
+<h1><%- title %></h1>
+
+<form action="/inv/update" method="post" class="form">
+  <fieldset>
+    <legend>Edit the Vehicle</legend>
+    <div class="form__field">
+      <label for="inv_model">Vehicle model:</label>
+      <input
+        type="text"
+        id="inv_model"
+        name="inv_model"
+        required
+        pattern="^[a-zA-Z]*$"
+        value="<%= locals.inv_model %>"
+      />
+      <span></span>
+    </div>
+
+    <div class="form__field">
+      <label for="inv_make">Vehicle company:</label>
+      <input
+        type="text"
+        id="inv_make"
+        name="inv_make"
+        required
+        value="<%= locals.inv_make %>"
+      />
+      <span></span>
+    </div>
+
+    <div class="form__field">
+      <label for="inv_year">Vehicle Year:</label>
+      <input
+        type="number"
+        id="inv_year"
+        name="inv_year"
+        required
+        pattern="^[0-9]*$"
+        value="<%= locals.inv_year %>"
+      />
+      <span></span>
+    </div>
+
+    <div class="form__field">
+      <label for="inv_description">Vehicle description:</label>
+      <input
+        type="text"
+        id="inv_description"
+        name="inv_description"
+        required
+        value="<%= locals.inv_description %>"
+      />
+      <span></span>
+    </div>
+
+    <div class="form__field">
+      <label for="inv_image">Vehicle image:</label>
+      <input
+        type="file"
+        id="inv_image"
+        name="inv_image"
+        accept="image/png, image/gif, image/jpeg"
+        required
+        value="<%= locals.inv_image %>"
+      />
+      <span></span>
+    </div>
+
+    <div class="form__field">
+      <label for="inv_thumbnail">Vehicle thumbnail:</label>
+      <input
+        id="inv_thumbnail"
+        name="inv_thumbnail"
+        type="file"
+        name="myImage"
+        accept="image/png, image/gif, image/jpeg"
+        required
+        value="<%= locals.inv_thumbnail %>"
+      />
+
+      <span></span>
+    </div>
+
+    <div class="form__field">
+      <label for="inv_price">Vehicle Price:</label>
+      <input
+        type="number"
+        id="inv_price"
+        name="inv_price"
+        required
+        pattern="^[0-9]*$"
+        value="<%= locals.inv_price %>"
+      />
+      <span></span>
+    </div>
+
+    <div class="form__field">
+      <label for="inv_miles">Vehicle miles:</label>
+      <input
+        type="number"
+        id="inv_miles"
+        name="inv_miles"
+        required
+        pattern="^[0-9]*$"
+        value="<%= locals.inv_miles %>"
+      />
+      <span></span>
+    </div>
+
+    <div class="form__field">
+      <label for="inv_color">Vehicle Color:</label>
+      <input
+        type="text"
+        id="inv_color"
+        name="inv_color"
+        required
+        pattern="^[a-zA-Z]*$"
+        value="<%= locals.inv_color %>"
+      />
+      <span></span>
+    </div>
+
+    <div class="form__field"><%- classificationList %></div>
+
+    <div class="form__field form__field--btn">
+      <button type="submit" name="submit" value="Update Vehicle">
+        Update vehicle
+      </button>
+      <span></span>
+    </div>
+  </fieldset>
+  <% if (errors) { %>
+  <ul class="notice">
+    <% errors.array().forEach(error => { %>
+    <li><%= error.msg %></li>
+    <% }) %>
+  </ul>
+  <% } %>
+</form>
