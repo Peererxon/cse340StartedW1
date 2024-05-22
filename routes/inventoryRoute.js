@@ -35,5 +35,11 @@ router.get(
 
 //CRUD operations routes
 router.get("/edit/:inventory_id", invController.buildEditInventory);
+router.post(
+  "/update/",
+  invRules.inventoryRules(),
+  invRules.checkUpdateData,
+  invController.updateInventory
+);
 
 module.exports = router;

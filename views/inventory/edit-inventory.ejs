@@ -1,6 +1,6 @@
 <h1><%- title %></h1>
 
-<form action="/inv/update" method="post" class="form">
+<form action="/inv/update" method="post" class="form" id="updateForm">
   <fieldset>
     <legend>Edit the Vehicle</legend>
     <div class="form__field">
@@ -123,10 +123,15 @@
     <div class="form__field"><%- classificationList %></div>
 
     <div class="form__field form__field--btn">
-      <button type="submit" name="submit" value="Update Vehicle">
+      <button type="submit" name="submit" value="Update Vehicle" disabled>
         Update vehicle
       </button>
-      <span></span>
+      <!--eslint-disable-next-line no-use-before-define-->
+      <input
+        type="hidden"
+        name="inv_id"
+        value="<%= locals.inv_id && locals.inv_id  %>"
+      />
     </div>
   </fieldset>
   <% if (errors) { %>
@@ -137,3 +142,5 @@
   </ul>
   <% } %>
 </form>
+
+<script src="/js/inv-update.js"></script>

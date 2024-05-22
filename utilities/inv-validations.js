@@ -97,6 +97,13 @@ validate.inventoryRules = () => {
   ];
 };
 
+/**
+ * @description Validates the add data
+ * @param {*} req request
+ * @param {*} res response
+ * @param {*} next next function from express
+ * @returns {void}
+ */
 validate.checkInventoryData = async (req, res, next) => {
   const {
     inv_make,
@@ -119,6 +126,54 @@ validate.checkInventoryData = async (req, res, next) => {
       title: "Add Inventory",
       nav,
       errors,
+      inv_make,
+      inv_model,
+      inv_year,
+      inv_price,
+      inv_color,
+      inv_miles,
+      inv_description,
+      classification_id,
+      inv_thumbnail,
+      inv_image,
+      classificationList,
+    });
+    return;
+  }
+  next();
+};
+
+/**
+ * @description Validates the update data
+ * @param {*} req request
+ * @param {*} res response
+ * @param {*} next next function from express
+ * @returns {void}
+ */
+validate.checkUpdateData = async (req, res, next) => {
+  const {
+    inv_make,
+    inv_model,
+    inv_year,
+    inv_miles,
+    inv_price,
+    inv_color,
+    inv_description,
+    classification_id,
+    inv_thumbnail,
+    inv_image,
+    inv_id,
+  } = req.body;
+  let errors = validationResult(req);
+  console.log(inv_image);
+  if (!errors.isEmpty()) {
+    const nav = await utilities.getNav();
+    const classificationList = await utilities.buildClassificationList();
+    res.render("./inventory/edit-inventory", {
+      title: "Edit Inventory",
+      nav,
+      errors,
+      inv_id,
       inv_make,
       inv_model,
       inv_year,

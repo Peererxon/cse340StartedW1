@@ -70,10 +70,39 @@ async function addVehicle(vehicle) {
   ]);
 }
 
+async function updateVehicle(vehicle) {
+  console.log("🚀 ~ updateVehicle ~ vehicle:", vehicle);
+  const query = `UPDATE inventory SET classification_id = $1, inv_make = $2,
+  inv_model = $3,
+  inv_year = $4,
+  inv_miles = $5,
+  inv_price = $6,
+  inv_color = $7,
+  inv_description = $8,
+  inv_image = $9,
+  inv_thumbnail = $10
+  WHERE inv_id = $11 RETURNING *`;
+  const data = await pool.query(query, [
+    vehicle.classification_id,
+    vehicle.inv_make,
+    vehicle.inv_model,
+    vehicle.inv_year,
+    vehicle.inv_miles,
+    vehicle.inv_price,
+    vehicle.inv_color,
+    vehicle.inv_description,
+    vehicle.inv_image,
+    vehicle.inv_thumbnail,
+    vehicle.inv_id,
+  ]);
+  return data.rows[0];
+}
+
 module.exports = {
   getClassifications,
   getInventoryByClassificationId,
   getCarById,
   addClassification,
   addVehicle,
+  updateVehicle,
 };
