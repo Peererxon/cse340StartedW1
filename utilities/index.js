@@ -172,12 +172,14 @@ Util.checkJWTToken = (req, res, next) => {
           res.clearCookie("jwt");
           return res.redirect("/account/login");
         }
+        console.table(accountData);
         res.locals.accountData = accountData;
         res.locals.loggedin = 1;
         next();
       }
     );
   } else {
+    res.locals.loggedin = 0;
     next();
   }
 };
@@ -190,4 +192,19 @@ Util.checkJWTToken = (req, res, next) => {
 Util.handleErrors = (fn) => (req, res, next) =>
   Promise.resolve(fn(req, res, next)).catch(next);
 
+/**
+ * @description Middleware to check if the user is admin to protect routes
+ */
+
+Util.checkAdminGuard = (req, res, next) => {
+  const userAllowed =
+    res.locals.accountData?.account_type === "admin" ||
+    res.locals.accountData?.account_type === "Employee";
+  if (userAllowed) {
+    next();
+  } else {
+    req.flash("notice", "You are not authorized to view this page.");
+    res.redirect("/account/login");
+  }
+};
 module.exports = Util;

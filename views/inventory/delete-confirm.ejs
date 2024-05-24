@@ -1,0 +1,138 @@
+<h1><%- title %></h1>
+
+<form
+  action="/inv/delete/<%= locals.inv_id %>"
+  method="post"
+  class="form"
+  id="deleteForm"
+>
+  <fieldset>
+    <legend>Delete the Vehicle</legend>
+    <div class="form__field">
+      <input
+        readonly
+        type="text"
+        id="inv_model"
+        name="inv_model"
+        required
+        pattern="^[a-zA-Z]*$"
+        value="<%= locals.inv_model %>"
+      />
+    </div>
+
+    <div class="form__field">
+      <input
+        readonly
+        type="text"
+        id="inv_make"
+        name="inv_make"
+        required
+        value="<%= locals.inv_make %>"
+      />
+    </div>
+
+    <div class="form__field">
+      <input
+        readonly
+        type="number"
+        id="inv_year"
+        name="inv_year"
+        required
+        pattern="^[0-9]*$"
+        value="<%= locals.inv_year %>"
+      />
+    </div>
+
+    <div class="form__field">
+      <input
+        readonly
+        type="text"
+        id="inv_description"
+        name="inv_description"
+        required
+        value="<%= locals.inv_description %>"
+      />
+    </div>
+
+    <div class="form__field">
+      <input
+        readonly
+        type="file"
+        id="inv_image"
+        name="inv_image"
+        accept="image/png, image/gif, image/jpeg"
+        required
+        value="<%= locals.inv_image %>"
+      />
+    </div>
+
+    <div class="form__field">
+      <input
+        readonly
+        id="inv_thumbnail"
+        name="inv_thumbnail"
+        type="file"
+        name="myImage"
+        accept="image/png, image/gif, image/jpeg"
+        required
+        value="<%= locals.inv_thumbnail %>"
+      />
+    </div>
+
+    <div class="form__field">
+      <input
+        readonly
+        type="number"
+        id="inv_price"
+        name="inv_price"
+        required
+        pattern="^[0-9]*$"
+        value="<%= locals.inv_price %>"
+      />
+    </div>
+
+    <div class="form__field">
+      <input
+        readonly
+        type="number"
+        id="inv_miles"
+        name="inv_miles"
+        required
+        pattern="^[0-9]*$"
+        value="<%= locals.inv_miles %>"
+      />
+    </div>
+
+    <div class="form__field">
+      <input
+        readonly
+        type="text"
+        id="inv_color"
+        name="inv_color"
+        required
+        pattern="^[a-zA-Z]*$"
+        value="<%= locals.inv_color %>"
+      />
+    </div>
+
+    <div class="form__field"><%- classificationList %></div>
+
+    <div class="form__field form__field--btn">
+      <button type="submit" name="submit" value="Update Vehicle">Delete</button>
+      <p>Confirm Deletion - The delete is permanent.</p>
+      <!--eslint-disable-next-line no-use-before-define-->
+      <input
+        type="hidden"
+        name="inv_id"
+        value="<%= locals.inv_id && locals.inv_id  %>"
+      />
+    </div>
+  </fieldset>
+  <% if (errors) { %>
+  <ul class="notice">
+    <% errors.array().forEach(error => { %>
+    <li><%= error.msg %></li>
+    <% }) %>
+  </ul>
+  <% } %>
+</form>

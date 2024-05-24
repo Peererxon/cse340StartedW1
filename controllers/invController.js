@@ -257,4 +257,86 @@ invCont.updateInventory = async function (req, res) {
   }
 };
 
+//Delivering the delete confirmation page
+invCont.buildConfirmDelete = async function (req, res) {
+  const inv_id = parseInt(req.params.inventory_id);
+  let nav = await utilities.getNav();
+  const [itemData] = await invModel.getCarById(inv_id);
+  console.log("🚀 ~ itemData:", itemData);
+  const classificationList = await utilities.buildClassificationList(
+    itemData.classification_id
+  );
+  const itemName = `${itemData.inv_make} ${itemData.inv_model}`;
+  res.render("./inventory/delete-confirm", {
+    title: "Deleting " + itemName,
+    nav,
+    classificationList,
+    errors: null,
+    inv_id: itemData.inv_id,
+    inv_make: itemData.inv_make,
+    inv_model: itemData.inv_model,
+    inv_year: itemData.inv_year,
+    inv_description: itemData.inv_description,
+    inv_image: itemData.inv_image,
+    inv_thumbnail: itemData.inv_thumbnail,
+    inv_price: itemData.inv_price,
+    inv_miles: itemData.inv_miles,
+    inv_color: itemData.inv_color,
+    classification_id: itemData.classification_id,
+  });
+};
+
+invCont.deleteInventory = async function (req, res) {
+  const nav = await utilities.getNav();
+  const {
+    inv_id,
+    inv_make,
+    inv_model,
+    inv_year,
+    inv_miles,
+    inv_price,
+    inv_color,
+    inv_description,
+    classification_id,
+    inv_thumbnail,
+    inv_image,
+  } = req.body;
+
+  const vehicleUpdated = {
+    inv_id,
+  };
+  const itemName = `${inv_make} ${inv_model}`;
+  try {
+    const deleteResult = await invModel.deleteVehicle(vehicleUpdated);
+    if (deleteResult) {
+      req.flash("notice", `Vehicle ${itemName} deleted successfully.`);
+
+      res.redirect("/inv/");
+    }
+  } catch (error) {
+    console.error(error);
+    const classificationList = await utilities.buildClassificationList(
+      itemData.classification_id
+    );
+    req.flash("notice", "Sorry, the delete process failed.");
+    res.status(501).render("./inventory/delete-confirm", {
+      title: `Edit ${itemName}`,
+      nav,
+      errors: null,
+      inv_id,
+      inv_make,
+      inv_model,
+      inv_year,
+      inv_description,
+      inv_image,
+      inv_thumbnail,
+      inv_price,
+      inv_miles,
+      inv_color,
+      classification_id,
+      classificationList,
+    });
+  }
+};
+
 module.exports = invCont;

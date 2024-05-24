@@ -11,35 +11,62 @@ router.get("errors/error/:errorStatus", baseController.buildError);
 
 // Route to build admin view
 router.get("", invController.buildManagementView);
-router.get("/classification", invController.buildAddClassification);
+router.get("/getInventory/:classification_id", invController.getInventoryJSON);
+
+//CRUD operations routes
+
+router.get(
+  "/classification",
+  utilities.checkAdminGuard,
+  invController.buildAddClassification
+);
 router.post(
   "/classification",
+  utilities.checkAdminGuard,
   invRules.classificationRules(),
   invRules.checkClassificationData,
-  utilities.handleErrors(invController.addClassification)
-);
-
-router.get("/inventory", invController.buildAddInventory);
-
-router.post(
-  "/inventory",
-  invRules.inventoryRules(),
-  invRules.checkInventoryData,
-  utilities.handleErrors(invController.addVehicle)
+  invController.addClassification
 );
 
 router.get(
-  "/getInventory/:classification_id",
-  utilities.handleErrors(invController.getInventoryJSON)
+  "/inventory",
+  utilities.checkAdminGuard,
+  invController.buildAddInventory
 );
 
-//CRUD operations routes
-router.get("/edit/:inventory_id", invController.buildEditInventory);
+router.post(
+  "/inventory",
+  utilities.checkAdminGuard,
+  invRules.inventoryRules(),
+  invRules.checkInventoryData,
+  invController.addVehicle
+);
+
+router.get(
+  "/edit/:inventory_id",
+  utilities.checkAdminGuard,
+  invController.buildEditInventory
+);
 router.post(
   "/update/",
+  utilities.checkAdminGuard,
   invRules.inventoryRules(),
   invRules.checkUpdateData,
   invController.updateInventory
+);
+
+// Delete inventory item
+router.get(
+  "/delete/:inventory_id",
+  utilities.checkAdminGuard,
+  invController.buildConfirmDelete
+);
+router.post(
+  "/delete/:inventory_id",
+  utilities.checkAdminGuard,
+  invRules.inventoryRules(),
+  invRules.checkUpdateData,
+  invController.deleteInventory
 );
 
 module.exports = router;
