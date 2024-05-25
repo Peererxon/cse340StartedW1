@@ -115,11 +115,12 @@
       <% } %>
     </div>
     <div class="form__field">
-      <label for="confirmPassword">Confirm Password:</label>
+      <label for="oldpasswrd">Old password:</label>
       <input
         type="password"
-        id="confirmPassword"
-        name="account_password_confirm"
+        id="oldpassword"
+        name="oldpassword"
+        pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{12,}$"
         required
       />
       <span></span>

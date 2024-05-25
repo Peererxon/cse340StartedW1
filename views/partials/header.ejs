@@ -12,7 +12,9 @@
       welcome <%- locals.accountData.account_firstname%> <%-
       locals.accountData.account_lastname %> !
     </p>
-    <a title="Click to log out" href="/account/logout">Log Out</a>
+    <form action="/account/logout" method="post">
+      <button type="submit" href="/account/logout">Log Out</button>
+    </form>
   </div>
   <% } %> <% if (locals.loggedin == 0) { %>
   <div class="tools">

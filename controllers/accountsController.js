@@ -94,6 +94,7 @@ accountController.registerAccount = async function (req, res) {
  * ************************************ */
 accountController.accountLogin = async function (req, res) {
   let nav = await utilities.getNav();
+  const passwordRules = utilities.buildPasswordRules();
   console.log("accountLogin controller called");
   const { account_email, account_password } = req.body;
   const accountData = await accountModel.getAccountByEmail(account_email);
@@ -126,6 +127,16 @@ accountController.accountLogin = async function (req, res) {
         });
       }
       return res.redirect("/account/");
+    } else {
+      req.flash("notice", "Please check your credentials and try again.");
+      res.status(400).render("account/login", {
+        title: "Login",
+        nav,
+        errors: null,
+        account_email,
+        passwordRules,
+      });
+      return;
     }
   } catch (error) {
     return new Error("Access Forbidden");
@@ -196,6 +207,64 @@ accountController.updateInformationAccount = async function (req, res) {
     console.error(error);
     new Error(error);
   }
+};
+accountController.logoutAccount = async function (req, res) {
+  res.clearCookie("jwt");
+  res.redirect("/");
+};
+
+accountController.updatePassword = async (req, res) => {
+  const { account_id, account_password, oldpassword } = req.body;
+  jwt.verify(
+    req.cookies.jwt,
+    process.env.ACCESS_TOKEN_SECRET,
+    async (err, accountInformation) => {
+      if (accountInformation.account_id !== parseInt(account_id)) {
+        const passwordRules = utilities.buildPasswordRules();
+        let nav = await utilities.getNav();
+        const { account_firstname, account_lastname, account_email } =
+          accountInformation;
+        req.flash("notice", "This is not your account information");
+        return res.status(401).render("account/update", {
+          title: "Update",
+          nav,
+          passwordRules,
+          errors: null,
+          account_firstname,
+          account_lastname,
+          account_email,
+        });
+      }
+      if (err) {
+        console.log("Error verifying token");
+        req.flash("notice", "Please log in.");
+        return res.redirect("/account/login");
+      }
+      const accountData = await accountModel.getAccountById(account_id);
+      const passworsdMatch = await bcrypt.compare(
+        oldpassword,
+        accountData.account_password
+      );
+      if (passworsdMatch) {
+        const hashedPassword = await bcrypt.hash(account_password, 10);
+        const accountData = {
+          account_id,
+          account_password: hashedPassword,
+        };
+        const updateResult = await accountModel.updatePassword(accountData);
+        if (updateResult) {
+          req.flash("notice", "Password updated successfully.");
+          return res.redirect("/account/");
+        } else {
+          req.flash("notice", "Sorry, the password update failed.");
+          return res.redirect("/account/update/" + account_id);
+        }
+      } else {
+        req.flash("notice", "Sorry, the password update failed.");
+        return res.redirect("/account/update/" + account_id);
+      }
+    }
+  );
 };
 
 module.exports = accountController;

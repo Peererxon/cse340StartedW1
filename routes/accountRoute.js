@@ -25,6 +25,13 @@ router.get(
   utilities.handleErrors(accountController.buildUpdate)
 );
 
+router.post(
+  "/update/passwd",
+  utilities.checkLogin,
+  regValidate.updatePasswordRules(),
+  utilities.handleErrors(accountController.updatePassword)
+);
+
 router.get("/login", accountController.buildLogin);
 //Process the login attemp
 router.post(
@@ -41,4 +48,6 @@ router.post(
   regValidate.checkRegData,
   utilities.handleErrors(accountController.registerAccount)
 );
+
+router.post("/logout", utilities.handleErrors(accountController.logoutAccount));
 module.exports = router;

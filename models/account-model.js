@@ -84,10 +84,25 @@ async function updateAccount(accountData) {
   }
 }
 
+async function updatePassword(accountData) {
+  try {
+    const sql =
+      "UPDATE account SET account_password = $1 WHERE account_id = $2 RETURNING *";
+    const result = await pool.query(sql, [
+      accountData.account_password,
+      accountData.account_id,
+    ]);
+    return result.rows[0];
+  } catch (error) {
+    return error.message;
+  }
+}
+
 module.exports = {
   registerAccount,
   checkExistingEmail,
   getAccountByEmail,
   updateAccount,
   getAccountById,
+  updatePassword,
 };

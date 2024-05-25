@@ -51,6 +51,23 @@ validate.registrationRules = () => {
   ];
 };
 
+validate.updatePasswordRules = () => {
+  return [
+    body("account_password")
+      .trim()
+      .notEmpty()
+      .isStrongPassword({
+        minLength: 12,
+        minLowercase: 1,
+        minUppercase: 1,
+        minNumbers: 1,
+        minSymbols: 1,
+      })
+      .withMessage("Password does not meet requirements"),
+    body("oldpassword").trim().notEmpty(),
+  ];
+};
+
 validate.checkRegData = async (req, res, next) => {
   const passwordRules = utilities.buildPasswordRules();
   const { account_firstname, account_lastname, account_email } = req.body;

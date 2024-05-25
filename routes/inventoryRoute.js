@@ -10,7 +10,7 @@ router.get("/detail/:carId", invController.buildByCarId);
 router.get("errors/error/:errorStatus", baseController.buildError);
 
 // Route to build admin view
-router.get("", invController.buildManagementView);
+router.get("", utilities.checkLogin, invController.buildManagementView);
 router.get("/getInventory/:classification_id", invController.getInventoryJSON);
 
 //CRUD operations routes
