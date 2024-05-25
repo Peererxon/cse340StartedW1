@@ -3,3 +3,16 @@
 <% messages() %>
 
 <p>You;re logged in!</p>
+
+<a href="/account/update/<%- locals.accountData.account_id %>"
+  >Update Account Information
+</a>
+
+<% if (locals.accountData.account_type == 'Client' ||
+locals.accountData.account_type == 'Client') { %>
+<h2>Welcome <%- locals.accountData.account_firstname %></h2>
+<% } %> <% if (locals.accountData.account_type == 'Employee' ||
+locals.accountData.account_type == 'Admin') { %>
+<h3>Inventory Management</h3>
+<p><a href="/inv">Go to management view</a></p>
+<% } %>

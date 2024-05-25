@@ -5,11 +5,14 @@
   <!-- eslint-disable -->
   <% if (locals.loggedin == 1) { %>
   <div class="tools">
-    <a title="Click to log out" href="/account/logout">Log Out</a>
+    <a href="/inv">Go to management view</a>
+  </div>
+  <div class="tools">
     <p>
       welcome <%- locals.accountData.account_firstname%> <%-
       locals.accountData.account_lastname %> !
     </p>
+    <a title="Click to log out" href="/account/logout">Log Out</a>
   </div>
   <% } %> <% if (locals.loggedin == 0) { %>
   <div class="tools">

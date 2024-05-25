@@ -11,6 +11,20 @@ router.get(
   utilities.handleErrors(accountController.buildLoggedApp)
 );
 
+//update account information
+router.post(
+  "/update",
+  regValidate.updateInformationRules(),
+  regValidate.checkUpdateInformation,
+  utilities.handleErrors(accountController.updateInformationAccount)
+);
+
+router.get(
+  "/update/:account_id",
+  utilities.checkLogin,
+  utilities.handleErrors(accountController.buildUpdate)
+);
+
 router.get("/login", accountController.buildLogin);
 //Process the login attemp
 router.post(

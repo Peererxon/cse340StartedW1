@@ -6,7 +6,7 @@ const invCont = {};
 /* ***************************
  *  Build inventory by classification view
  * ************************** */
-invCont.buildByClassificationId = async function (req, res, next) {
+invCont.buildByClassificationId = async function (req, res) {
   const classification_id = req.params.classificationId;
   const data = await invModel.getInventoryByClassificationId(classification_id);
   const grid = await utilities.buildClassificationGrid(data);
@@ -23,7 +23,7 @@ invCont.buildByClassificationId = async function (req, res, next) {
 /* ***************************
  *  Build inventory by car detail view
  * ************************** */
-invCont.buildByCarId = async function (req, res, next) {
+invCont.buildByCarId = async function (req, res) {
   const cardId = req.params.carId;
   const data = await invModel.getCarById(cardId);
   let nav = await utilities.getNav();
@@ -37,7 +37,7 @@ invCont.buildByCarId = async function (req, res, next) {
   });
 };
 
-invCont.buildManagementView = async function (req, res, next) {
+invCont.buildManagementView = async function (req, res) {
   let nav = await utilities.getNav();
   const classificationList = await utilities.buildClassificationList();
   res.render("./inventory/admin-functions", {
@@ -48,7 +48,7 @@ invCont.buildManagementView = async function (req, res, next) {
   });
 };
 
-invCont.buildAddClassification = async function (req, res, next) {
+invCont.buildAddClassification = async function (req, res) {
   let nav = await utilities.getNav();
   res.render("./inventory/add-classification", {
     title: "Add Classification",

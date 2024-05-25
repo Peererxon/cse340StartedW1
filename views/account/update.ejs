@@ -1,0 +1,133 @@
+<script>
+  function validatePassword(password) {
+    const lengthRegex = /.{12,}/; // Al menos 12 caracteres
+    const digitRegex = /\d/; // Al menos un dígito
+    const lowercaseRegex = /[a-z]/; // Al menos una minúscula
+    const uppercaseRegex = /[A-Z]/; // Al menos una mayúscula
+    const nonAlphaNumericRegex = /[^a-zA-Z0-9]/; // Al menos un no alfanumérico
+
+    document.getElementById("length").className = lengthRegex.test(password)
+      ? "valid"
+      : "invalid";
+    document.getElementById("digit").className = digitRegex.test(password)
+      ? "valid"
+      : "invalid";
+    document.getElementById("lowercase").className = lowercaseRegex.test(
+      password
+    )
+      ? "valid"
+      : "invalid";
+    document.getElementById("uppercase").className = uppercaseRegex.test(
+      password
+    )
+      ? "valid"
+      : "invalid";
+    document.getElementById("nonAlphaNumeric").className =
+      nonAlphaNumericRegex.test(password) ? "valid" : "invalid";
+  }
+</script>
+
+<h1><%- title %></h1>
+
+<form action="/account/update" method="post" id="accountForm" class="form">
+  <%- messages() %>
+  <fieldset>
+    <legend>Update Information form</legend>
+
+    <input
+      type="hidden"
+      name="account_id"
+      value="<%= locals.accountData.account_id %>"
+    />
+
+    <div class="form__field">
+      <label for="firstName">First Name:</label>
+      <input
+        type="text"
+        id="firstName"
+        name="account_firstname"
+        required
+        value="<%= locals.account_firstname %>"
+      />
+      <span></span>
+    </div>
+    <div class="form__field">
+      <label for="lastName">Last Name:</label>
+      <input
+        type="text"
+        id="lastName"
+        name="account_lastname"
+        required
+        value="<%= locals.account_lastname %>"
+      />
+      <span></span>
+    </div>
+    <div class="form__field">
+      <label for="email">Email Address:</label>
+      <input
+        type="email"
+        id="email"
+        name="account_email"
+        required
+        value="<%= locals.account_email %>"
+      />
+      <span></span>
+    </div>
+
+    <div class="form__field form__field--btn">
+      <button type="submit">Update info</button>
+      <span></span>
+    </div>
+  </fieldset>
+</form>
+<hr />
+<form
+  action="/account/update/passwd"
+  method="post"
+  id="passwordForm"
+  class="form"
+>
+  <fieldset>
+    <legend>Update Password form</legend>
+
+    <input
+      type="hidden"
+      name="account_id"
+      value="<%= locals.accountData.account_id %>"
+    />
+    <div class="form__field">
+      <label for="password">Password:</label>
+      <input
+        type="password"
+        id="password"
+        name="account_password"
+        required
+        pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{12,}$"
+        oninput="validatePassword(this.value)"
+      />
+      <span></span>
+      <%- passwordRules %> <% if (errors) { %>
+      <ul class="notice">
+        <% errors.array().forEach(error => { %>
+        <li><%= error.msg %></li>
+        <% }) %>
+      </ul>
+      <% } %>
+    </div>
+    <div class="form__field">
+      <label for="confirmPassword">Confirm Password:</label>
+      <input
+        type="password"
+        id="confirmPassword"
+        name="account_password_confirm"
+        required
+      />
+      <span></span>
+    </div>
+
+    <div class="form__field form__field--btn">
+      <button type="submit">Update Password</button>
+      <span></span>
+    </div>
+  </fieldset>
+</form>

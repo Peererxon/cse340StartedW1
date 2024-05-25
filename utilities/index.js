@@ -115,13 +115,21 @@ Util.buildCarDetailGrid = async function (data) {
 Util.buildPasswordRules = function () {
   let rules = ` 
    <div>
-    <span id="length">There must be at least 12 characters</span>,
-    <span id="digit">one must be a number</span> ,
-    <span id="lowercase">one must be a lowercase letter</span> ,
-    <span id="uppercase">one must be a capital letter</span> ,
-    <span id="nonAlphaNumeric">
-      and one must be a non-alphanumeric character
-    </span>
+    <div class="form__field">
+      <strong id="length" for="length">At least 12 characters</strong>
+    </div>
+    <div class="form__field">
+      <strong id="digit" for="digit">At least one digit</strong>
+    </div>
+    <div class="form__field">
+      <strong id="lowercase" for="lowercase">At least one lowercase letter</strong>
+    </div>
+    <div class="form__field">
+      <strong id="uppercase" for="uppercase">At least one uppercase letter</strong>
+    </div>
+    <div class="form__field">
+      <strong id="nonAlphaNumeric" for="nonAlphaNumeric"> At least one non-alphanumeric character</strong>
+    </div>
   </div>`;
   return rules;
   //autocomplete
@@ -172,7 +180,7 @@ Util.checkJWTToken = (req, res, next) => {
           res.clearCookie("jwt");
           return res.redirect("/account/login");
         }
-        console.table(accountData);
+        //console.table(accountData);
         res.locals.accountData = accountData;
         res.locals.loggedin = 1;
         next();

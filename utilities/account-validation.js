@@ -103,4 +103,56 @@ validate.checkLogData = async (req, res, next) => {
   }
   next();
 };
+
+validate.updateInformationRules = () => {
+  //validate the user information excluding the password
+  return [
+    //first name validation
+    body("account_firstname")
+      .trim()
+      .escape()
+      .notEmpty()
+      .isLength({ min: 1 })
+      .withMessage("Please provide first name"),
+
+    //last name validation
+    body("account_lastname")
+      .trim()
+      .escape()
+      .isLength({ min: 1 })
+      .notEmpty()
+      .withMessage("Please provide a last name"),
+
+    //email validation
+    body("account_email")
+      .trim()
+      .escape()
+      .normalizeEmail()
+      .isEmail()
+      .withMessage("Please provide a valid email address"),
+  ];
+};
+
+validate.checkUpdateInformation = async (req, res, next) => {
+  const passwordRules = utilities.buildPasswordRules();
+  const { account_firstname, account_lastname, account_email, account_id } =
+    req.body;
+  let errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    let nav = await utilities.getNav();
+    console.log("Invalida user information rules");
+    res.render("account/update", {
+      title: "Update",
+      nav,
+      errors,
+      account_firstname,
+      account_lastname,
+      account_email,
+      passwordRules,
+    });
+    return;
+  }
+  console.log("validation sucefull for update information");
+  next();
+};
 module.exports = validate;

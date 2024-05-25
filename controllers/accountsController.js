@@ -141,4 +141,61 @@ accountController.buildLoggedApp = async function (req, res) {
   });
 };
 
+accountController.buildUpdate = async function (req, res) {
+  const { account_id } = req.params;
+
+  let nav = await utilities.getNav();
+  const passwordRules = utilities.buildPasswordRules();
+
+  // get user information by id to populate the update vie
+  const userData = await accountModel.getAccountById(account_id);
+  const { account_firstname, account_lastname, account_email } = userData;
+  res.render(`account/update`, {
+    title: "Update",
+    nav,
+    errors: null,
+    passwordRules,
+    account_firstname,
+    account_lastname,
+    account_email,
+  });
+};
+
+accountController.updateInformationAccount = async function (req, res) {
+  let nav = await utilities.getNav();
+  const passwordRules = utilities.buildPasswordRules();
+  const { account_firstname, account_lastname, account_email, account_id } =
+    req.body;
+  const accountData = {
+    account_firstname,
+    account_lastname,
+    account_email,
+    account_id,
+  };
+  console.log("user updated information");
+  console.table(accountData);
+  try {
+    const updateResult = await accountModel.updateAccount(accountData);
+    console.log("updateResult", updateResult);
+    if (updateResult) {
+      req.flash("notice", "Information updated successfully.");
+      res.redirect("/");
+    } else {
+      req.flash("notice", "Sorry, the update process failed.");
+      res.status(501).render("account/update", {
+        title: "Update",
+        nav,
+        passwordRules,
+        errors: null,
+        account_firstname,
+        account_lastname,
+        account_email,
+      });
+    }
+  } catch (error) {
+    console.error(error);
+    new Error(error);
+  }
+};
+
 module.exports = accountController;
