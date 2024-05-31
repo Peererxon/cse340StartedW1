@@ -29,6 +29,27 @@ async function getInventoryByClassificationId(classification_id) {
 }
 
 /**
+ * @description Get inventory ordered by key
+ * @param {*} inventory_id
+ * @param {*} key
+ */
+async function getInventoryOrdered(inventory_id, key) {
+  const orderedCases = {
+    name: "inv_make",
+    price: "inv_price",
+    year: "inv_year",
+  };
+  const dbTable = orderedCases[key];
+
+  const sql = `SELECT * FROM public.inventory AS i 
+  JOIN public.classification AS c 
+  ON i.classification_id = c.classification_id 
+  WHERE i.classification_id = $1 ORDER BY $2 DESC`;
+  const data = await pool.query(sql, [inventory_id, dbTable]);
+  return data.rows;
+}
+
+/**
  * Retrieves a car from the inventory by its ID.
  * @param {number} inventory_id - The ID of the car in the inventory.
  * @returns {Promise<Array<Object>>} A promise that resolves to an array of car objects.
@@ -111,6 +132,7 @@ async function deleteVehicle(inventory_id) {
 module.exports = {
   getClassifications,
   getInventoryByClassificationId,
+  getInventoryOrdered,
   getCarById,
   addClassification,
   addVehicle,
