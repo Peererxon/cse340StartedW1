@@ -1,5 +1,5 @@
 const utilities = require(".");
-const { body, validationResult } = require("express-validator");
+const { body, validationResult, query } = require("express-validator");
 const validate = {};
 
 validate.classificationRules = () => {
@@ -189,6 +189,42 @@ validate.checkUpdateData = async (req, res, next) => {
     return;
   }
   next();
+};
+
+validate.orderByQueryRules = () => {
+  return [
+    query("orderBy", "wrong filter in order by")
+      .escape()
+      .matches("^[a-z]*$")
+      .optional(),
+  ];
+};
+
+validate.checkOrderBy = async (req, res, next) => {
+  try {
+    const classification_id = req.params.classificationId;
+    //const data = await inv.getInventoryByClassificationId(classification_id);
+    //const grid = await utilities.buildClassificationGrid(data);
+    const grid = `<div></div>`;
+    const errors = validationResult(req);
+    console.log(JSON.stringify(errors));
+    //const className = data[0].classification_name;
+    const nav = await utilities.getNav();
+    if (!errors.isEmpty()) {
+      res.render("./inventory/classification", {
+        title: "Wrong search",
+        nav,
+        grid,
+        errors,
+      });
+      return;
+    }
+    console.log("ejecutando flujo normal, sin errorers");
+    next();
+  } catch (error) {
+    console.log(error + " in the orderByValidations");
+    next();
+  }
 };
 
 module.exports = validate;

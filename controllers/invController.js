@@ -12,12 +12,30 @@ invCont.buildByClassificationId = async function (req, res) {
   const grid = await utilities.buildClassificationGrid(data);
   let nav = await utilities.getNav();
   const className = data[0].classification_name;
-  res.render("./inventory/classification", {
-    title: className + " vehicles",
-    nav,
-    grid,
-    errors: null,
-  });
+  if (req.query.orderBy) {
+    const { orderBy } = req.query;
+    console.log(`With the order parameter of ${orderBy}`);
+
+    let data;
+    if (orderBy == "default") {
+      data = await invModel.getInventoryByClassificationId(classification_id);
+    } else {
+      data = await invModel.getInventoryOrdered(classification_id, orderBy);
+    }
+    const grid = await utilities.buildClassificationGrid(data);
+    res.json(grid);
+  } else {
+    res.render("./inventory/classification", {
+      title: className + " vehicles",
+      nav,
+      grid,
+      errors: null,
+    });
+  }
+};
+
+invCont.checkQueriesByClassification = async function (req, res) {
+  return [];
 };
 
 /* ***************************

@@ -41,11 +41,16 @@ async function getInventoryOrdered(inventory_id, key) {
   };
   const dbTable = orderedCases[key];
 
+  if (!dbTable) {
+    throw new Error(`Invalid order key: ${key}`);
+  }
+
   const sql = `SELECT * FROM public.inventory AS i 
   JOIN public.classification AS c 
   ON i.classification_id = c.classification_id 
-  WHERE i.classification_id = $1 ORDER BY $2 DESC`;
-  const data = await pool.query(sql, [inventory_id, dbTable]);
+  WHERE i.classification_id = $1 ORDER BY ${dbTable} DESC`;
+  //postgress do not support bind parameters for table names
+  const data = await pool.query(sq, [inventory_id]);
   return data.rows;
 }
 

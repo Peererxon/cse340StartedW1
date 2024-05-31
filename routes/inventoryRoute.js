@@ -5,7 +5,13 @@ const baseController = require("../controllers/baseController");
 const utilities = require("../utilities");
 const invRules = require("../utilities/inv-validations");
 // Route to build inventory by classification view
-router.get("/type/:classificationId", invController.buildByClassificationId);
+router.get(
+  "/type/:classificationId",
+  invRules.orderByQueryRules(),
+  invRules.checkOrderBy,
+  invController.buildByClassificationId
+);
+//router.get("/type/:classificationId/:orderBy");
 router.get("/detail/:carId", invController.buildByCarId);
 router.get("errors/error/:errorStatus", baseController.buildError);
 

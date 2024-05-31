@@ -5,4 +5,21 @@
 <% } else { res.redirect('/') } %>
 
 <!-- Message block -->
+<select name="order" id="orderSelected">
+  <option disabled selected>Order by</option>
+  <option value="0">Default</option>
+  <option value="1">By Name</option>
+  <option value="2">By Price</option>
+  <option value="3">By Year</option>
+</select>
+
+<% if (errors) { %>
+<ul class="notice">
+  <% errors.array().forEach(error => { %>
+  <li><%= error.msg %></li>
+  <% }) %>
+</ul>
+<% } %>
+
+<script src="/js/order.js"></script>
 <%# messages() %> <%- grid %>
