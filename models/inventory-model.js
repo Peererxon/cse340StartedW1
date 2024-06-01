@@ -50,7 +50,7 @@ async function getInventoryOrdered(inventory_id, key) {
   ON i.classification_id = c.classification_id 
   WHERE i.classification_id = $1 ORDER BY ${dbTable} DESC`;
   //postgress do not support bind parameters for table names
-  const data = await pool.query(sq, [inventory_id]);
+  const data = await pool.query(sql, [inventory_id]);
   return data.rows;
 }
 
